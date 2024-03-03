@@ -1,38 +1,49 @@
-.App {
+.App{
+  margin: 100px;
+  padding:30px 100px;
+  width: 70%;
+  border: 1px solid #000;
+}
+.title_Profile{
+  text-transform: uppercase;
   text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+.profile{
+  text-align: center;
+  text-transform: uppercase;
+}
+.img_profile {
+  height: 220px;
+  width: 170px;
+  border: 1px solid red;
+  overflow: hidden; /* Ensure that the image stays within the specified dimensions */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.img_profile input {
+  /* display: none; Hide the default file input button */
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.img_profile img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover; /* Đảm bảo ảnh vừa với phần tử cha */
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.header{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-around;
+  margin-top: 50px;
 }
+.inputform{
+ 
 
-.App-link {
-  color: #61dafb;
 }
+input{
+  margin-left: 10px;
+  height: 30px;
+  border-radius: 2px;
+  padding-left: 10px;
+  border: 1px solix #ccc;
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
