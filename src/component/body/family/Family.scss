@@ -1,0 +1,17 @@
+.family{
+    margin: 20px 0;
+    &__title{
+        text-transform: uppercase;
+        &__desc{
+            text-transform: none;
+            font-size: 18px;
+            color: rgba(0, 0, 0, 0.88);
+            font-weight: 100;
+           font-size: italic !important;
+        }
+    }
+}
+.ant-table-cell{
+    text-align: center !important;
+    width: 20%;
+}

@@ -1,0 +1,31 @@
+.ant-upload-select {
+    width: 157px !important;
+    height: 195px !important;
+}
+.avatar-uploader{
+    width: auto !important;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    &__content{
+        text-align: center;
+        &__top{
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        &__bot{
+            margin: 16px 0 0 0;
+            font-size: 16px;
+        }
+        &__line{
+            margin: 0 ;
+            height: 5px;
+            line-height: 5px;
+        }
+        &__title{
+            font-size: 32px;
+            text-transform: uppercase;
+        }
+    }
+}

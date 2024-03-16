@@ -1,49 +1,5 @@
-.App{
-  margin: 100px;
-  padding:30px 100px;
-  width: 70%;
-  border: 1px solid #000;
-}
-.title_Profile{
-  text-transform: uppercase;
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-}
-.profile{
-  text-align: center;
-  text-transform: uppercase;
-}
-.img_profile {
-  height: 220px;
-  width: 170px;
-  border: 1px solid red;
-  overflow: hidden; /* Ensure that the image stays within the specified dimensions */
-}
-
-.img_profile input {
-  /* display: none; Hide the default file input button */
-}
-.img_profile img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover; /* Đảm bảo ảnh vừa với phần tử cha */
-}
-.header{
-  display: flex;
-  justify-content: space-around;
-  margin-top: 50px;
-}
-.inputform{
- 
-
-}
-input{
-  margin-left: 10px;
-  height: 30px;
-  border-radius: 2px;
-  padding-left: 10px;
-  border: 1px solix #ccc;
-
+body{
+    background-color: #ddd;
+    margin-top: 20px;
+    font-size: 18px;
 }

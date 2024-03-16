@@ -1,0 +1,146 @@
+.bodyApp{
+    &__title{
+        text-transform: uppercase;
+    }
+}
+.formBody{
+    &__item{
+        margin-bottom: 13px !important;
+        &__radio{
+            display: flex;
+            align-items: center;
+        }
+        &__date{
+            border: none !important;
+            border-bottom: 1px dashed #000 !important;
+            border-radius: 0 !important;
+            &:focus{
+                border-bottom: 1px solid  #1677ff !important;
+        box-shadow: none !important;
+        background: none !important;
+            }
+            &:focus-visible{
+                box-shadow: none !important;
+                border-bottom: 1px solid  #1677ff !important;             
+            }
+        }
+    &__cascader{
+        .ant-select-selector{
+
+            border: none !important;
+            border-radius: 0 !important;
+            border-bottom: 1px dashed #000 !important;
+        }
+    }
+
+    }
+    &__promise{
+        font-size: 18px;
+        line-height: 25px;
+        margin: 20px 0;
+        span{
+            margin-left: 60px;
+
+        }
+    }
+    &__footer{
+        &__title{
+            font-size: 19px;
+            font-family:  'Times New Roman';
+            margin: 0;
+            text-align: center;
+            &__right{
+                text-align: center;
+                margin-top: 10px;
+                font-size: 16px;
+                margin-bottom: 80px;
+            }
+        }
+    }
+}
+.form__input{
+    border: none !important;
+    border-radius: 0 !important;
+    border-bottom: 1px dashed  #000 !important;
+    padding: 0 !important;
+    // padding-left: 5px !important;
+    padding: 2px !important;
+    &::placeholder{
+        text-transform: initial !important;
+        font-size: 16px !important;
+    }
+    &:focus{
+        border-bottom: 1px solid  #1677ff !important;
+        box-shadow: none !important;
+
+    }
+    &__textName{
+        text-transform: uppercase;
+    }
+}
+.ant-picker-outlined:focus-within{
+    box-shadow: none !important;
+    border-bottom: 1px solid  #1677ff !important;             
+
+}
+.form__buttonSubmit{
+    margin: 0 auto !important;
+    margin-top: 15px !important;
+    display: flex;
+}
+label{
+    font-size: 16px !important;
+}
+.ant-select-selector{
+    border: none !important;
+    border-bottom: 1px dashed #000 !important;
+    border-radius: 0 !important;
+}
+.ant-picker{
+    width: 200px !important;
+}
+.ant-picker-input{
+    input{
+        text-align: center !important;
+    
+        &::placeholder{
+           
+        }
+    }
+   
+
+}
+.ant-picker-outlined{
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px dashed #000 !important;
+}
+.footer__date{
+    display: flex;
+    // width: 250px;
+    margin: 30px 0;
+  &__input{
+    width: 120px;
+  }
+  &__inputTime{
+    width: 120px !important;
+  }
+   
+    justify-content: flex-end;
+    &__container{
+        display: flex;  max-width: 400px;
+        gap: 8px;
+        float: right;
+    }
+}
+.formBody__footer__text{
+    width: 200px;
+   
+    display: flex;
+    margin: 0 auto;
+    text-align: center;
+    &::placeholder{
+        margin: 0 auto;
+        text-align: center;
+    }
+}
