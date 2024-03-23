@@ -21,13 +21,10 @@ const Body = () => {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
-  const onChangeCas = (value) => {
-    console.log(value);
-  };
   const [form] = Form.useForm();
   const [showComponents, setShowComponents] = useState(false); // State để kiểm soát việc hiển thị các thành phần
   const [options, setOptions] = useState([]);
-  const onFinish = async (values) => {
+  const onFinish = async () => {
     try {
       await form.validateFields(); // Kiểm tra lỗi từ các rules
       setShowComponents(true); // Nếu không có lỗi, hiển thị các thành phần
