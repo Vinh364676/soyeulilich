@@ -1,5 +1,5 @@
 import { Button, Col, DatePicker, Form, Input, Row, Table } from 'antd';
-import moment from 'moment';
+
 import React, { useState } from 'react'
 const { RangePicker } = DatePicker;
 
