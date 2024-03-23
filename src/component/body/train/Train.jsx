@@ -7,15 +7,22 @@ function Train() {
   const [data, setData] = useState([]);
   const [relationship, setRelationship] = useState("");
   const [name, setName] = useState("");
-  const [yearBirth, setYearBirth] = useState(null);
+  const [nganhhoc, setNganhhoc] = useState("");
   const [career, setCareer] = useState("");
   const [workPlace, setWorkPlace] = useState("");
+  const [startDate, setStartDate] = useState(null); // Trạng thái để lưu trữ tháng năm bắt đầu
+  const [endDate, setEndDate] = useState(null); // Trạng thái để lưu trữ tháng năm kết thúc
   const columns = [
     {
       title: "Từ tháng năm đến tháng năm",
-      dataIndex: "relationship",
-      key: "relationship",
-      width:200,
+      dataIndex: "fromToMonthYear",
+      key: "fromToMonthYear",
+
+      render: (_, record) => (
+        <span>
+          Từ {record.startDate} đến {record.endDate}
+        </span>
+      ),
     },
     {
       title: "Tên trường hoặc cơ sở đào tạo",
@@ -24,8 +31,8 @@ function Train() {
     },
     {
       title: "Ngành học",
-      dataIndex: "yearBirth",
-      key: "yearBirth",
+      dataIndex: "nganhhoc",
+      key: "nganhhoc",
     },
     {
       title: "Hình thức đào tạo",
@@ -46,16 +53,20 @@ function Train() {
         key: data.length,
         relationship: relationship,
         name: name,
-        yearBirth: yearBirth,
+        nganhhoc: nganhhoc,
         career: career,
         workPlace: workPlace,
+        startDate: startDate,
+        endDate: endDate,
       },
     ]);
     setRelationship("");
     setName("");
-    setYearBirth("");
+    setNganhhoc("");
     setCareer("");
     setWorkPlace("");
+    setStartDate(null);
+    setEndDate(null);
   };
   return (
     <div data-aos="fade-up"
@@ -67,14 +78,19 @@ function Train() {
       <Form requiredMark={false} className="formBody" onFinish={handleAddData}>
         <Form.Item label="Từ tháng năm đến tháng năm" className="formBody__item">
         <RangePicker
-      picker="month"
-      placeholder={['Bắt đầu','Kết thúc']}
-      id={{
-        start: 'Tháng năm',
-        end: 'Tháng năm',
-      }}
-        format={"MM-YYYY"}
-      />
+        picker="month"
+        placeholder={['Bắt đầu','Kết thúc']}
+        id={{
+          start: 'Tháng năm',
+          end: 'Tháng năm',
+        }}
+        onChange={(dates, dateStrings) => {
+            setStartDate(dateStrings[0]);
+            setEndDate(dateStrings[1]);
+          }}
+          format="MM-YYYY"
+
+        />
         </Form.Item>
 
         <Row gutter={20}>
@@ -111,8 +127,8 @@ function Train() {
               ]}
 >
   <Input className="form__input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={nganhhoc}
+                onChange={(e) => setNganhhoc(e.target.value)}
                 placeholder="Nhập ngành học"
   />
 </Form.Item>

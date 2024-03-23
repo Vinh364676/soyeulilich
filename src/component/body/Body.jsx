@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Body.scss";
 import {
   Button,
@@ -26,7 +26,7 @@ const Body = () => {
   };
   const [form] = Form.useForm();
   const [showComponents, setShowComponents] = useState(false); // State để kiểm soát việc hiển thị các thành phần
-
+  const [options, setOptions] = useState([]);
   const onFinish = async (values) => {
     try {
       await form.validateFields(); // Kiểm tra lỗi từ các rules
@@ -34,91 +34,68 @@ const Body = () => {
       message.success('Thông tin cá nhân hợp lệ!');
     } catch (error) {
       // Nếu có lỗi, hiển thị thông báo lỗi
-      // message.error('Vui lòng hoàn thiện đúng thông tin cần thiết.');
+      message.error('Vui lòng hoàn thiện đúng thông tin cần thiết.');
     }
   };
-  const options = [
-    {
-      value: "tphcm",
-      label: "Thành phố Hồ Chí Minh",
-      children: [
-        {
-          value: "quan1",
-          label: "Quận 1",
-          children: [
-            {
-              value: "phuong1",
-              label: "Phường 1",
-            },
-            {
-              value: "phuong2",
-              label: "Phường 2",
-            },
-            {
-              value: "phuong3",
-              label: "Phường 3",
-            },
-          ],
-        },
-        {
-          value: "quan2",
-          label: "Quận 2",
-          children: [
-            {
-              value: "phuong1",
-              label: "Phường 1",
-            },
-            {
-              value: "phuong3",
-              label: "Phường 3",
-            },
-            {
-              value: "phuong5",
-              label: "Phường 5",
-            },
-          ],
-        },
-        {
-          value: "quan3",
-          label: "Quận 3",
-          children: [
-            {
-              value: "phuong3",
-              label: "Phường 3",
-            },
-            {
-              value: "phuong6",
-              label: "Phường 6",
-            },
-            {
-              value: "phuong9",
-              label: "Phường 9",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      value: "hanoi",
-      label: "Hà Nội",
-      children: [
-        {
-          value: "quanbadinh",
-          label: "Quận Ba Đình",
-          children: [
-            {
-              value: "phuongxa",
-              label: "Phường Phúc Xá",
-            },
-            {
-              value: "phuongbach",
-              label: "Phường Trúc Bạch",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const response = await fetch('https://vietnam-administrative-division-json-server-swart.vercel.app/province');
+        const data = await response.json();
+        const provinceOptions = data.map(province => ({
+          value: province.idProvince,
+          label: province.name,
+          isLeaf: false, // Chỉ đánh dấu là false cho tỉnh/thành phố
+        }));
+        setOptions(provinceOptions);
+      } catch (error) {
+        console.error('Error fetching provinces:', error);
+      }
+    };
+
+    fetchProvinces();
+  }, []);
+
+  const loadData = async selectedOptions => {
+    const targetOption = selectedOptions[selectedOptions.length - 1];
+    targetOption.loading = true;
+
+    if (selectedOptions.length === 1) {
+      try {
+        const response = await fetch('https://vietnam-administrative-division-json-server-swart.vercel.app/district');
+        const data = await response.json();
+        const filteredDistricts = data.filter(district => district.idProvince === targetOption.value);
+        const districtOptions = filteredDistricts.map(district => ({
+          value: district.idDistrict,
+          label: district.name,
+          isLeaf: false, // Chỉ đánh dấu là false cho quận/huyện
+        }));
+        targetOption.children = districtOptions;
+        setOptions([...options]);
+      } catch (error) {
+        console.error('Error loading districts:', error);
+      }
+    } else if (selectedOptions.length === 2) {
+      try {
+        const response = await fetch('https://vietnam-administrative-division-json-server-swart.vercel.app/commune');
+        const data = await response.json();
+        const filteredCommunes = data.filter(commune => commune.idDistrict === targetOption.value);
+        const communeOptions = filteredCommunes.map(commune => ({
+          value: commune.idCommune,
+          label: commune.name,
+        }));
+        targetOption.children = communeOptions;
+        setOptions([...options]);
+      } catch (error) {
+        console.error('Error loading communes:', error);
+      }
+    }
+
+    targetOption.loading = false;
+  };
+
+
   const disabledDate = (current) => {
     // Kiểm tra xem ngày hiện tại có lớn hơn hoặc bằng ngày được chọn không
     return current && current >= moment().endOf("day");
@@ -229,11 +206,16 @@ const Body = () => {
             ]}
           >
             <Cascader
-              options={options}
-              onChange={onChangeCas}
-              placeholder="Chọn nơi sinh"
-              className="formBody__item__cascader"
-            />
+      options={options}
+      loadData={loadData}
+      onChange={(value, selectedOptions) => {
+        // Handle change here if needed
+        console.log(value, selectedOptions);
+      }}
+      placeholder="Chọn nơi sinh"
+        className="formBody__item__cascader"
+      changeOnSelect
+    />
           </Form.Item>
 
           {/* 5 */}
@@ -248,12 +230,17 @@ const Body = () => {
               },
             ]}
           >
-            <Cascader
-              options={options}
-              onChange={onChangeCas}
-              placeholder="Chọn nguyên quán"
-              className="formBody__item__cascader"
-            />
+    <Cascader
+      options={options}
+      loadData={loadData}
+      onChange={(value, selectedOptions) => {
+        // Handle change here if needed
+        console.log(value, selectedOptions);
+      }}
+      placeholder="Chọn nguyên quán"
+        className="formBody__item__cascader"
+      changeOnSelect
+    />
           </Form.Item>
 
           {/* 6 */}
@@ -269,11 +256,16 @@ const Body = () => {
             ]}
           >
             <Cascader
-              options={options}
-              onChange={onChangeCas}
-              placeholder="Chọn nơi đăng ký hộ khẩu thường trú"
-              className="formBody__item__cascader"
-            />
+      options={options}
+      loadData={loadData}
+      onChange={(value, selectedOptions) => {
+        // Handle change here if needed
+        console.log(value, selectedOptions);
+      }}
+      placeholder="Chọn nơi đăng ký hộ khẩu thường trú"
+        className="formBody__item__cascader"
+      changeOnSelect
+    />
           </Form.Item>
 
           {/* 7 */}
@@ -288,12 +280,17 @@ const Body = () => {
               },
             ]}
           >
-            <Cascader
-              options={options}
-              onChange={onChangeCas}
-              placeholder="Chọn chỗ ở hiện nay"
-              className="formBody__item__cascader"
-            />
+          <Cascader
+      options={options}
+      loadData={loadData}
+      onChange={(value, selectedOptions) => {
+        // Handle change here if needed
+        console.log(value, selectedOptions);
+      }}
+      placeholder="Chọn chỗ ở hiện nay"
+        className="formBody__item__cascader"
+      changeOnSelect
+    />
           </Form.Item>
 
           {/* 8 */}
