@@ -10,7 +10,7 @@ function Family() {
   const [yearBirth, setYearBirth] = useState(null);
   const [career, setCareer] = useState("");
   const [workPlace, setWorkPlace] = useState("");
-
+  const [form] = Form.useForm();
   const columns = [
     {
       title: "Quan hệ",
@@ -62,22 +62,28 @@ function Family() {
     },
   ];
   const handleAddData = () => {
-    setData([
-      ...data,
-      {
-        key: data.length,
-        relationship: relationship,
-        name: name,
-        yearBirth: yearBirth,
-        career: career,
-        workPlace: workPlace,
-      },
-    ]);
-    setRelationship("");
-    setName("");
-    setYearBirth("");
-    setCareer("");
-    setWorkPlace("");
+    if (relationship.trim() === "" || name.trim() === "" || !yearBirth || career.trim() === "" || workPlace.trim() === "" ) {
+      return;
+    }else{
+      setData([
+        ...data,
+        {
+          key: data.length,
+          relationship: relationship,
+          name: name,
+          yearBirth: yearBirth,
+          career: career,
+          workPlace: workPlace,
+        },
+      ]);
+      setRelationship("");
+      setName("");
+      setYearBirth("");
+      setCareer("");
+      setWorkPlace("");
+      form.resetFields();
+    }
+    
   };
   return (
     <div data-aos="fade-up"
@@ -90,17 +96,26 @@ function Family() {
         </span>
       </h3>
 
-      <Form requiredMark={false} className="formBody" onFinish={handleAddData}>
-        <Form.Item label="Quan hệ" className="formBody__item">
-          <Select
-
-            value={relationship || undefined} // Đặt giá trị là undefined nếu relationship là null
-            onChange={(value) => setRelationship(value)}
-            placeholder="Chọn mối quan hệ"
-            style={{ width: 170 }}
-            options={option}
-          />
-        </Form.Item>
+      <Form  form={form} requiredMark={false} className="formBody" onFinish={handleAddData} >
+      <Form.Item
+  label="Quan hệ"
+  className="formBody__item"
+  name="relationship"
+  rules={[
+    {
+      required: true,
+      message: 'Vui lòng chọn mối quan hệ!',
+    },
+  ]}
+>
+  <Select
+    value={relationship || undefined}
+    onChange={(value) => setRelationship(value)}
+    placeholder="Chọn mối quan hệ"
+    style={{ width: 170 }}
+    options={option}
+  />
+</Form.Item>
 
         <Row gutter={20}>
           <Col xl={16}>
@@ -129,6 +144,10 @@ function Family() {
   className="formBody__item"
   name="yearBirth" // Thêm name vào Form.Item nếu bạn đang sử dụng Form Validation
   rules={[
+    {
+      required:true,
+      message:"Vui lòng chọn năm sinh!"
+    },
     {
       validator: (_, value) => {
         if (value && value > moment()) {

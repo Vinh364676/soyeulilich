@@ -5,13 +5,13 @@ const { RangePicker } = DatePicker;
 
 function Train() {
   const [data, setData] = useState([]);
-  const [relationship, setRelationship] = useState("");
   const [name, setName] = useState("");
   const [nganhhoc, setNganhhoc] = useState("");
   const [career, setCareer] = useState("");
   const [workPlace, setWorkPlace] = useState("");
   const [startDate, setStartDate] = useState(null); // Trạng thái để lưu trữ tháng năm bắt đầu
-  const [endDate, setEndDate] = useState(null); // Trạng thái để lưu trữ tháng năm kết thúc
+  const [endDate, setEndDate] = useState(null);
+  const [form] = Form.useForm(); // Trạng thái để lưu trữ tháng năm kết thúc
   const columns = [
     {
       title: "Từ tháng năm đến tháng năm",
@@ -47,27 +47,36 @@ function Train() {
   ];
 
   const handleAddData = () => {
-    setData([
-      ...data,
-      {
-        key: data.length,
-        relationship: relationship,
-        name: name,
-        nganhhoc: nganhhoc,
-        career: career,
-        workPlace: workPlace,
-        startDate: startDate,
-        endDate: endDate,
-      },
-    ]);
-    setRelationship("");
-    setName("");
-    setNganhhoc("");
-    setCareer("");
-    setWorkPlace("");
-    setStartDate(null);
-    setEndDate(null);
-  };
+    if (name.trim() === "" ||nganhhoc.trim() === "" || career.trim() === "" || workPlace.trim() === "" || !startDate || !endDate) {
+      return;
+    }else{
+      setData([
+        ...data,
+        {
+          key: data.length,
+   
+          name: name,
+          nganhhoc: nganhhoc,
+          career: career,
+          workPlace: workPlace,
+          startDate: startDate,
+          endDate: endDate,
+        },
+      ]);
+
+      setName("");
+      setNganhhoc("");
+      setCareer("");
+      setWorkPlace("");
+      setStartDate(null);
+      setEndDate(null);
+      form.resetFields();
+      form.setFieldsValue({ dateRange: [null, null] });
+    }
+    }
+     
+   
+  
   return (
     <div data-aos="fade-up"
     data-aos-duration="1500" className="family">
@@ -75,24 +84,34 @@ function Train() {
       III. QUÁ TRÌNH ĐÀO TẠO, BỒI DƯỠNG.
       </h3>
 
-      <Form requiredMark={false} className="formBody" onFinish={handleAddData}>
-        <Form.Item label="Từ tháng năm đến tháng năm" className="formBody__item">
-        <RangePicker
-        picker="month"
-        placeholder={['Bắt đầu','Kết thúc']}
-        id={{
-          start: 'Tháng năm',
-          end: 'Tháng năm',
-        }}
-        onChange={(dates, dateStrings) => {
-            setStartDate(dateStrings[0]);
-            setEndDate(dateStrings[1]);
-          }}
-          format="MM-YYYY"
+      <Form  form={form} requiredMark={false} className="formBody" onFinish={handleAddData}>
 
-        />
-        </Form.Item>
-
+        <Form.Item
+  label="Từ tháng năm đến tháng năm"
+  className="formBody__item"
+  name="dateStrings"
+  rules={[
+    {
+      required: true,
+      message: 'Vui lòng chọn ngày!',
+      type: 'array',
+    },
+  ]}
+>
+  <RangePicker
+    picker="month"
+    placeholder={['Bắt đầu', 'Kết thúc']}
+    id={{
+      start: 'Tháng năm',
+      end: 'Tháng năm',
+    }}
+    onChange={(dates, dateStrings) => {
+      setStartDate(dateStrings[0]);
+      setEndDate(dateStrings[1]);
+    }}
+    format="MM-YYYY"
+  />
+</Form.Item>
         <Row gutter={20}>
           <Col xl={16}>
             <Form.Item

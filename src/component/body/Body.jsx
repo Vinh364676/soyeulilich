@@ -9,6 +9,7 @@ import {
   Input,
   Radio,
   Row,
+  Select,
   message,
 } from "antd";
 import moment from "moment";
@@ -92,7 +93,8 @@ const Body = () => {
     targetOption.loading = false;
   };
 
-
+  const filter = (inputValue, path) =>
+  path.some((option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1);
   const disabledDate = (current) => {
     // Kiểm tra xem ngày hiện tại có lớn hơn hoặc bằng ngày được chọn không
     return current && current >= moment().endOf("day");
@@ -206,9 +208,12 @@ const Body = () => {
       options={options}
       loadData={loadData}
       onChange={(value, selectedOptions) => {
-        // Handle change here if needed
         console.log(value, selectedOptions);
       }}
+      showSearch={{
+      filter,
+    }}
+    onSearch={(value) => console.log(value)}
       placeholder="Chọn nơi sinh"
         className="formBody__item__cascader"
       changeOnSelect
@@ -234,6 +239,9 @@ const Body = () => {
         // Handle change here if needed
         console.log(value, selectedOptions);
       }}
+      showSearch={{
+      filter,
+    }}
       placeholder="Chọn nguyên quán"
         className="formBody__item__cascader"
       changeOnSelect
@@ -259,6 +267,9 @@ const Body = () => {
         // Handle change here if needed
         console.log(value, selectedOptions);
       }}
+      showSearch={{
+      filter,
+    }}
       placeholder="Chọn nơi đăng ký hộ khẩu thường trú"
         className="formBody__item__cascader"
       changeOnSelect
@@ -284,6 +295,9 @@ const Body = () => {
         // Handle change here if needed
         console.log(value, selectedOptions);
       }}
+      showSearch={{
+      filter,
+    }}
       placeholder="Chọn chỗ ở hiện nay"
         className="formBody__item__cascader"
       changeOnSelect
@@ -366,12 +380,7 @@ const Body = () => {
                 label="Tôn giáo"
                 name="tongiao"
                 className="formBody__item"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng nhập tôn giáo",
-                  },
-                ]}
+                
               >
                 <Input className="form__input" placeholder="Nhập tôn giáo" />
               </Form.Item>
@@ -393,7 +402,7 @@ const Body = () => {
           {/* 11 */}
           <Form.Item
             className="formBody__item"
-            label="17. Cơ quan công tác hiện nay (nếu có)"
+            label="11. Cơ quan công tác hiện nay (nếu có)"
             name="congtac"
           >
             <Input
@@ -404,7 +413,7 @@ const Body = () => {
           {/* 10 */}
           <Form.Item
             className="formBody__item"
-            label="18. Chức vụ hiện nay (nếu có)"
+            label="12. Chức vụ hiện nay (nếu có)"
           >
             <Input
               className="form__input"
@@ -414,7 +423,7 @@ const Body = () => {
           {/* 10 */}
           <Form.Item
             className="formBody__item"
-            label="20. Khen thưởng"
+            label="13. Khen thưởng"
             name="khenthuong"
           >
             <Input
@@ -425,7 +434,7 @@ const Body = () => {
           {/* 10 */}
           <Form.Item
             className="formBody__item"
-            label="21. Kỷ luật"
+            label="14. Kỷ luật"
             name="kyluat"
           >
             <Input
@@ -436,7 +445,7 @@ const Body = () => {
           {/* 22 */}
           <Form.Item
             className="formBody__item"
-            label="22. Sở trường"
+            label="15. Sở trường"
             name="sotruong"
           >
             <Input
@@ -453,6 +462,7 @@ const Body = () => {
 
           </Form.Item>
         </Form>
+     
         {showComponents?<div>
           <Family/>
           <Train/>
@@ -463,9 +473,11 @@ const Body = () => {
         <p className="formBody__promise"><span></span>Tôi xin cam đoan bản khai sơ yếu lý lịch trên đúng sự thật, nếu có điều gì không đúng tôi chịu trách nhiệm trước pháp luật về lời khai của mình.</p>
           <div className="footer__date">
           <div className="footer__date__container">
-          <Input className="form__input footer__date__input" placeholder="Nhập tỉnh">
-
-</Input>
+    <Select
+      placeholder="Chọn tỉnh thành phó"
+      style={{ width: 200 }}
+      options={options}
+    />
 <DatePicker className="footer__date__inputTime" placeholder="Chọn ngày" format={"DD-MM-YYYY"} disabledDate={disabledDate}/>
           </div>
           

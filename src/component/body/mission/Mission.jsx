@@ -7,7 +7,7 @@ function Mission() {
     const [chucvu, setChucvu] = useState("");
     const [startDate, setStartDate] = useState(null); // Trạng thái để lưu trữ tháng năm bắt đầu
   const [endDate, setEndDate] = useState(null); // Trạng thái để lưu trữ tháng năm kết thúc
-
+  const [form] = Form.useForm();
     const columns = [
       {
         title: "Từ tháng năm đến tháng năm",
@@ -33,7 +33,10 @@ function Mission() {
     ];
   
     const handleAddData = () => {
-      setData([
+      if (donvi.trim() === "" || chucvu.trim() === "" || !startDate || !endDate) {
+        // Nếu có bất kỳ trường nào rỗng, không thêm dữ liệu và kết thúc hàm
+        return;
+      }else{ setData([
         ...data,
         {
           key: data.length,
@@ -47,8 +50,10 @@ function Mission() {
       setDonvi("");
       setChucvu("");
       setStartDate(null);
-    setEndDate(null);
-      
+    setEndDate(null);}
+     
+    form.resetFields();
+    form.setFieldsValue({ dateRange: [null, null] });
     };
     return (
       <div data-aos="fade-up"
@@ -57,25 +62,36 @@ function Mission() {
         IV. QUÁ TRÌNH CÔNG TÁC
         </h3>
   
-        <Form  onFinish={() => {
+        <Form form={form}  onFinish={() => {
         handleAddData();
       }} requiredMark={false} className="formBody">
-          <Form.Item label="Từ tháng năm đến tháng năm" className="formBody__item">
-          <RangePicker
-        picker="month"
-        placeholder={['Bắt đầu','Kết thúc']}
-        id={{
-          start: 'Tháng năm',
-          end: 'Tháng năm',
-        }}
-        onChange={(dates, dateStrings) => {
-            setStartDate(dateStrings[0]);
-            setEndDate(dateStrings[1]);
-          }}
-          format="MM-YYYY"
+          <Form.Item
+  label="Từ tháng năm đến tháng năm"
+  className="formBody__item"
+  name="dateStrings"
+  rules={[
+    {
+      required: true,
+      message: 'Vui lòng chọn ngày!',
+      type: 'array',
+    },
+  ]}
+>
+  <RangePicker
+    picker="month"
+    placeholder={['Bắt đầu', 'Kết thúc']}
+    id={{
+      start: 'Tháng năm',
+      end: 'Tháng năm',
+    }}
+    onChange={(dates, dateStrings) => {
+      setStartDate(dateStrings[0]);
+      setEndDate(dateStrings[1]);
+    }}
+    format="MM-YYYY"
+  />
+</Form.Item>
 
-        />
-          </Form.Item>
   
           <Row gutter={20}>
             <Col xl={16}>
