@@ -24,6 +24,12 @@ const Body = () => {
   };
   const [form] = Form.useForm();
   const [showComponents, setShowComponents] = useState(false); // State để kiểm soát việc hiển thị các thành phần
+  const [khenthuongFields, setKhenthuongFields] = useState([{ key: 0, value: null }]); // State để lưu trữ các trường khen thưởng
+
+  const handleAddField = () => {
+    const nextKey = khenthuongFields[khenthuongFields.length - 1].key + 1; // Tạo key cho trường mới
+    setKhenthuongFields([...khenthuongFields, { key: nextKey, value: null }]);
+  };
   const [options, setOptions] = useState([]);
   const onFinish = async () => {
     try {
@@ -421,16 +427,28 @@ const Body = () => {
             />
           </Form.Item>
           {/* 10 */}
-          <Form.Item
-            className="formBody__item"
-            label="13. Khen thưởng"
-            name="khenthuong"
-          >
-            <Input
-              className="form__input"
-              placeholder="Nhập khen thưởng (nếu có)"
-            />
-          </Form.Item>
+          <Form.Item label="13. Khen thưởng" className="formBody__item formBody__item__khenthuong">
+        {khenthuongFields.map(field => (
+          <Input
+            key={field.key}
+            className="form__input"
+            placeholder="Nhập khen thưởng (nếu có)"
+            value={field.value}
+            onChange={e => {
+              const newValue = e.target.value;
+              setKhenthuongFields(prevFields =>
+                prevFields.map(prevField =>
+                  prevField.key === field.key ? { ...prevField, value: newValue } : prevField
+                )
+              );
+            }}
+          />
+        ))}
+        <Button type="dashed" onClick={handleAddField} block>
+          Thêm
+        </Button>
+      </Form.Item>
+
           {/* 10 */}
           <Form.Item
             className="formBody__item"
@@ -462,11 +480,11 @@ const Body = () => {
 
           </Form.Item>
         </Form>
-     
-        {showComponents?<div>
-          <Family/>
+        <Family/>
           <Train/>
           <Mission/>
+        {showComponents?<div>
+          
         </div>:null}
         <div data-aos="fade-up"
      data-aos-duration="1500">

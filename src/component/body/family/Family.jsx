@@ -61,21 +61,42 @@ function Family() {
       label: "Em",
     },
   ];
+  const isValueExists = (value, dataSource) => {
+    return dataSource.some(item => item.relationship === value);
+  }
   const handleAddData = () => {
-    if (relationship.trim() === "" || name.trim() === "" || !yearBirth || career.trim() === "" || workPlace.trim() === "" ) {
+    if (relationship.trim() === "" || name.trim() === "" || !yearBirth || career.trim() === "" || workPlace.trim() === "") {
       return;
-    }else{
-      setData([
-        ...data,
-        {
-          key: data.length,
-          relationship: relationship,
-          name: name,
-          yearBirth: yearBirth,
-          career: career,
-          workPlace: workPlace,
-        },
-      ]);
+    } else {
+      const newData = {
+        key: data.length,
+        relationship: relationship,
+        name: name,
+        yearBirth: yearBirth,
+        career: career,
+        workPlace: workPlace,
+      };
+  
+      const newDataWithCheck = [...data, newData];
+  
+      // Kiểm tra quy tắc xác thực trên newDataWithCheck
+      const parentData = newDataWithCheck.find(item => item.relationship === "Cha" || item.relationship === "Mẹ");
+
+      const siblingData = newDataWithCheck.find(item => item.relationship === "Anh" || item.relationship === "Chị");
+      const childData = newDataWithCheck.find(item => item.relationship === "Em");
+
+      if (parentData && siblingData && childData) {
+        if (moment(siblingData.yearBirth).isSameOrBefore(moment(parentData.yearBirth), 'year')) {
+          return Promise.reject(
+            new Error("Năm sinh của Anh/Chị phải lớn hơn năm sinh của Cha/Mẹ!")
+          );
+        
+        }
+        
+      }
+  
+      // Nếu quy tắc xác thực không bị vi phạm, cập nhật dữ liệu và trạng thái
+      setData(newDataWithCheck);
       setRelationship("");
       setName("");
       setYearBirth("");
@@ -83,8 +104,8 @@ function Family() {
       setWorkPlace("");
       form.resetFields();
     }
-    
   };
+  
   return (
     <div data-aos="fade-up"
     data-aos-duration="1500" className="family">
@@ -108,12 +129,15 @@ function Family() {
     },
   ]}
 >
-  <Select
+   <Select
     value={relationship || undefined}
     onChange={(value) => setRelationship(value)}
     placeholder="Chọn mối quan hệ"
     style={{ width: 170 }}
-    options={option}
+    options={option.map(item => ({
+      ...item,
+      disabled: isValueExists(item.value, data) // 2. Kiểm tra giá trị đã tồn tại hay không
+    }))}
   />
 </Form.Item>
 
@@ -142,21 +166,11 @@ function Family() {
           <Form.Item 
   label="Năm sinh" 
   className="formBody__item"
-  name="yearBirth" // Thêm name vào Form.Item nếu bạn đang sử dụng Form Validation
+  name="yearBirth" 
   rules={[
     {
-      required:true,
-      message:"Vui lòng chọn năm sinh!"
-    },
-    {
-      validator: (_, value) => {
-        if (value && value > moment()) {
-          return Promise.reject(
-            new Error("Năm sinh không được lớn hơn năm hiện tại!")
-          );
-        }
-        return Promise.resolve();
-      },
+      required: true,
+      message: "Vui lòng chọn năm sinh!"
     }
   ]}
 >
@@ -168,6 +182,7 @@ function Family() {
     placeholder="Chọn năm sinh"
   />
 </Form.Item>
+
           </Col>
         </Row>
 
